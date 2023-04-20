@@ -10,7 +10,7 @@ import { Component } from "@angular/core";
   selector: 'pm-root', //directive(custom html tag)
   template: `
   <div><h1>{{pageTitle}}</h1>
-    <div>My First Component</div>
+    <pm-products></pm-products>
   </div>
   `
 })
