@@ -44,7 +44,7 @@
                         <td>{{product.productName}}</td>
                         <td>{{product.productCode | lowercase}}</td>
                         <td>{{product.releaseDate}}</td>
-                        <td>{{product.price | currency:'USD': 'symbol': '1.2-2'}}</td>
+                        <td>{{product.price | currency:'USD': 'symbol': '1.2-2'}}</td> <!--currency pipe includes 3 params the currency abbrev, the symbol and the format -->
                         <td>{{product.starRating}}</td>
                     </tr>
                 </tbody>
