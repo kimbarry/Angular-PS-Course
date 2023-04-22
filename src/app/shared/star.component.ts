@@ -1,5 +1,5 @@
 
-import { Component, Input, OnChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
 
 @Component ({
     selector: 'pm-star',
@@ -9,12 +9,13 @@ import { Component, Input, OnChanges } from "@angular/core";
 export class StarComponent implements OnChanges {
     @Input() rating: number = 0;
     cropWidth: number = 75;
+    @Output() ratingClicked: EventEmitter<string> = new EventEmitter<string>();
 
     ngOnChanges(): void {
         this.cropWidth = this.rating * 75/5;//the 5 star image is 75px so each start is apprx 75/5px
     }
 
     onClick(): void {
-        console.log(`The rating ${this.rating} was clicked!`);//using backticks specifies  javascript template literal allows me to use a placeholde within a string
+        this.ratingClicked.emit(`The rating ${this.rating} was clicked!`);//using backticks specifies  javascript template literal allows me to use a placeholde within a string
     }
 }
