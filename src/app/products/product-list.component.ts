@@ -1,6 +1,7 @@
-import { Component, OnInit} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { IProduct } from "./product";
 import { ProductService } from "./product.service";
+import { Subscription } from "rxjs";
 
 @Component({
     selector: 'pm-products',
@@ -8,16 +9,19 @@ import { ProductService } from "./product.service";
     styleUrls: ["./product-list.component.css"]
 
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
     pageTitle: string = 'Product List:';
     imageWidth: number = 50;
     imageMargin: number = 2;
     showImage: boolean = false;
-    
+    errorMessage: string = '';
+    sub!: Subscription;
+
     private _listFilter: string = "";
     get listFilter(): string {
         return this._listFilter;
     }
+
     set listFilter(value: string) {
         this._listFilter = value;
         console.log('In Setter:', value);
@@ -27,8 +31,8 @@ export class ProductListComponent implements OnInit {
     filteredProducts: IProduct[] = [];
     products: IProduct[] = [];
 
-    constructor(private productService: ProductService){
-        
+    constructor(private productService: ProductService) {
+
     }
 
     toggleImage(): void {
@@ -36,13 +40,23 @@ export class ProductListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.products = this.productService.getProducts();
-        this.filteredProducts = this.products;
-        
+        this.sub = this.productService.getProducts().subscribe({
+            next: products => {
+                this.products = products;
+                this.filteredProducts = this.products;
+            },
+            error: err => this.errorMessage = err
+        });
+
+
+    }
+
+    ngOnDestroy(): void {
+        this.sub.unsubscribe();
     }
 
     onRatingClicked(message: string): void {
-        
+
         this.pageTitle = "Product List: " + message;
     }
 
